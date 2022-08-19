@@ -12,7 +12,7 @@ RED = (255,   0,   0)
 
 size = [800, 600]
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Game Title")
+pygame.display.set_caption("Dodge")
 
 x_pos, y_pos = map(lambda x: x//2, screen.get_size())
 
@@ -31,16 +31,6 @@ class Box:
         self.speed = speed
         self.image = image
 
-    def move(self, pressed, screen_size):
-        if pressed[pygame.K_UP] and (self.y_pos > 0):
-            self.y_pos -= self.speed
-        if pressed[pygame.K_DOWN] and (self.y_pos < screen_size[1] - self.height):
-            self.y_pos += self.speed
-        if pressed[pygame.K_LEFT] and (self.x_pos > 0):
-            self.x_pos -= self.speed
-        if pressed[pygame.K_RIGHT] and self.x_pos < screen_size[0] - self.width:
-            self.x_pos += self.speed
-
     def draw(self, screen):
 
         pygame.draw.rect(screen, self.color, [
@@ -54,6 +44,16 @@ class Box:
 class Player(Box):
     def __init__(self, x_pos, y_pos, width, height, color, speed, image):
         super().__init__(x_pos, y_pos, width, height, color, speed, image)
+
+    def move(self, pressed, screen_size):
+        if pressed[pygame.K_UP] and (self.y_pos > 0):
+            self.y_pos -= self.speed
+        if pressed[pygame.K_DOWN] and (self.y_pos < screen_size[1] - self.height):
+            self.y_pos += self.speed
+        if pressed[pygame.K_LEFT] and (self.x_pos > 0):
+            self.x_pos -= self.speed
+        if pressed[pygame.K_RIGHT] and self.x_pos < screen_size[0] - self.width:
+            self.x_pos += self.speed
 
 
 class Enemy(Box):
@@ -122,6 +122,9 @@ while playing:
                        20, GREEN, 3, "pngegg.png"))
         enemy_spawn_count += 1
 
+    
+
+
     for enemy in enemies:
         enemy.chasing_player(player)
         enemy.draw(screen)
@@ -130,15 +133,13 @@ while playing:
         collide = pygame.Rect.colliderect(player.get_rect(), enemy.get_rect())
 
         if collide:
-
             write(screen, "END", "arial", 100,
                   size[0]/2, size[1]/2, BLACK)
-
-            survival_time = str(round(time.time()-start_time, 2))
-            write(screen, survival_time, "arial",
-                  30, round(size[0] / 2), 400, BLACK)
-
             playing = False
+    
+    survival_time = str(round(time.time()-start_time, 2))
+    write(screen, survival_time, "arial",
+                  30, round(size[0] / 2), 10, BLACK)
 
     pygame.display.update()
 
