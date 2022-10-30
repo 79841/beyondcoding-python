@@ -23,7 +23,4 @@ for i in range(m, N):
     for j in range(1, 3):
         dp[i][j] = max(dp[i - 1][j], dp[i - m][j - 1] + (s[i + 1] - s[i + 1 - m]))
 
-
-# print(dp)
-
 print(dp[-1][-1])
