@@ -4,14 +4,35 @@ import pygame
 class Box:
     def __init__(self, center_x, center_y, width, height, color, speed):
 
-        self.x_pos = center_x - width / 2
-        self.y_pos = center_y - height / 2
-        self.center_x = center_x
-        self.center_y = center_y
         self.width = width
         self.height = height
+
+        self.center_x = center_x
+        self.center_y = center_y
+
         self.color = color
         self.speed = speed
+
+        self.x_pos = center_x - width / 2
+        self.y_pos = center_y - height / 2
+
+    # @property
+    # def x_pos(self):
+    #     return self._x_pos
+
+    # @x_pos.setter
+    # def x_pos(self, x_pos):
+    #     self._x_pos = x_pos
+    #     self.center_x = x_pos + self.width / 2
+
+    # @property
+    # def y_pos(self):
+    #     return self._y_pos
+
+    # @y_pos.setter
+    # def y_pos(self, y_pos):
+    #     self._y_pos = y_pos
+    #     self.center_y = y_pos + self.height / 2
 
     def draw(self, screen):
         pygame.draw.rect(
@@ -20,6 +41,9 @@ class Box:
 
     def get_rect(self):
         return pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
+
+    def check_collision(self, box):
+        return pygame.Rect.colliderect(self.get_rect(), box.get_rect())
 
 
 class Player(Box):
@@ -63,7 +87,7 @@ class Bullet(Box):
         self.center_x = self.x_pos + self.width / 2
         self.center_y = self.y_pos + self.height / 2
 
-    def check_floating(self, screen):
+    def check_hit_wall(self, screen):
         if (self.x_pos <= 0) or (self.x_pos >= screen.get_size()[0]):
             return False
         if (self.y_pos <= 0) or (self.y_pos >= screen.get_size()[1]):

@@ -22,6 +22,8 @@ player = object.Player(300, 500, 30, 30, GREEN, 5)
 
 bullets = []
 
+enemy = object.Box(200, 200, 30, 30, RED, 5)
+
 while playing:
 
     clock.tick(120)
@@ -47,9 +49,14 @@ while playing:
         bullet.move()
         bullet.draw(screen)
 
-    bullets = list(filter(lambda b: b.check_floating(screen), bullets))
+    bullets = list(filter(lambda b: b.check_hit_wall(screen), bullets))
+
+    enemy.draw(screen)
 
     pygame.display.update()
-    print(bullets)
+
+    for bullet in bullets:
+        if bullet.check_collision(enemy):
+            playing = False
 
 pygame.quit()
