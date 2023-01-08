@@ -41,5 +41,5 @@ while trashes:
 
             c += 1
     sizeOfTrashes.append(c)
-
+print(sizeOfTrashes)
 print(max(sizeOfTrashes))
