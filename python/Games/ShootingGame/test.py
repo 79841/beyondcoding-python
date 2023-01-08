@@ -3,6 +3,7 @@ import threading
 import socket
 import obj
 import pygame
+import time
 
 PORT = 5050
 SERVER = "localhost"
@@ -39,7 +40,6 @@ bullets = []
 
 
 def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {addr} Connected")
     global e_x_pos, e_y_pos, eb_x_pos, eb_y_pos
     global enemy_bullets
     # global y_pos
@@ -54,8 +54,6 @@ def handle_client(conn, addr):
             if msg == DISCONNECT_MESSAGE:
                 connected = False
 
-            print(f"[{addr}] {msg}")
-
             try:
                 ob, x_pos, y_pos = msg.split(",")
                 x_pos = 570 - float(x_pos)
@@ -69,9 +67,9 @@ def handle_client(conn, addr):
                     bullet.set_direction(eb_x_pos, eb_y_pos)
                     enemy_bullets.append(bullet)
                     # x_pos, y_pos = map(lambda pos: 570 - float(pos), msg.split(","))
-                print(ob, x_pos, y_pos)
+
             except Exception as e:
-                print(e)
+                ...
 
     finally:
         with clients_lock:
@@ -81,7 +79,6 @@ def handle_client(conn, addr):
 
 
 # def start():
-print("[SERVER STARTED]!")
 server.listen()
 while True:
     conn, addr = server.accept()
@@ -149,10 +146,17 @@ while True:
 
         for bullet in bullets:
             if bullet.check_collision(enemy):
+                print("you win")
+                time.sleep(2)
                 playing = False
+        
 
         for bullet in enemy_bullets:
             if bullet.check_collision(player):
+                print("you lose")
+                time.sleep(2)
                 playing = False
 
+
     pygame.quit()
+    exit()

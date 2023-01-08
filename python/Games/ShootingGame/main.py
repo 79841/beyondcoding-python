@@ -29,6 +29,7 @@ eb_x_pos, eb_y_pos = 0, 0
 
 enemy_bullets = []
 
+
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Shooting Game")
 
@@ -49,11 +50,6 @@ def recv(connection):
     global enemy_bullets
     while True:
         msg = connection.recv(1024).decode(FORMAT)
-        if msg == DISCONNECT_MESSAGE:
-                connected = False
-
-        print(f"{msg}")
-
         try:
             ob, x_pos, y_pos = msg.split(",")
             x_pos = 570 - float(x_pos)
@@ -67,9 +63,9 @@ def recv(connection):
                 bullet.set_direction(eb_x_pos, eb_y_pos)
                 enemy_bullets.append(bullet)
                 # x_pos, y_pos = map(lambda pos: 570 - float(pos), msg.split(","))
-            print(ob, x_pos, y_pos)
+            
         except Exception as e:
-            print(e)
+            ...
 
 
 connection = connect()
@@ -119,6 +115,7 @@ while playing:
 
     enemy.draw(screen)
 
+
     for bullet in enemy_bullets:
         bullet.move()
         bullet.draw(screen)
@@ -130,11 +127,16 @@ while playing:
 
     for bullet in bullets:
         if bullet.check_collision(enemy):
+            print("you win")
+            time.sleep(2)
             playing = False
+
 
     for bullet in enemy_bullets:
         if bullet.check_collision(player):
+            print("you lose")
+            time.sleep(2)
             playing = False
-
+    
 
 pygame.quit()
